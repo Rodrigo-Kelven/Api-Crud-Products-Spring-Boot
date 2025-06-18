@@ -10,6 +10,7 @@ Esta api será mais documentada em breve, ela fará parte de um conjunto de micr
 
 - Java: Linguagem utilizada na construção da API.
 - Spring Boot: Framework utilizado para a construção da API.
+- Spring JPA: Injeção de dependencias
 
 ### Como rodar:
 - #### Subir o banco e sua interfaçe em container:
