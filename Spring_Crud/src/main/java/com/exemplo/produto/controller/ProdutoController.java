@@ -9,11 +9,18 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+import org.springframework.scheduling.annotation.Async;
+import java.util.concurrent.CompletableFuture;
 
 import java.util.List;
+import java.util.Optional;
+
 
 @RestController
-@RequestMapping("/produtos")
+@RequestMapping("/api-v1/produtos")
+@Tag(name = "Products", description = "Endpoints API Products")
 public class ProdutoController {
 
     // variavel que recebe as dependencias JPA injetadas em ProdutoRepository
@@ -38,8 +45,32 @@ public class ProdutoController {
     		@ApiResponse(responseCode = "200", description = "Retornado com Sucesso."),
     		@ApiResponse(responseCode = "404", description = "Nenhum Produto enconteado.")
     })
-    public List<Produto> listar() {
-        return repository.findAll();
+    @Async
+    public CompletableFuture<ResponseEntity<List<Produto>>> listProducts() {
+    	
+    	// aloca numa variavel de tipo Long o valor que é referente a quantidade de objetos dentro do banco de dados
+    	// armazena a quantidade de dados no banco de dados
+    	Long count = repository.count();
+    	
+    	
+    	List<Produto> productsListed = repository.findAll();
+    	
+    	// se nao tiver nenhum dado no banco de dados
+    	if (count == 0) {
+    		return CompletableFuture.completedFuture(
+    				// ResponseEntity response com o not Found -> status code 404
+    				// ResponseEntity tem todas as classes de resposta de cabecalho, que soa os status code.
+    				ResponseEntity.notFound()
+	    				.header("Message", "Nenhum Produto existente!")
+	    				.build() // Conclui a construção do ResponseEntity e retorna o objeto finalizado.
+    			);
+    	}
+    	
+        return CompletableFuture.completedFuture(
+        		ResponseEntity.ok()
+        				.header("Message", "Produtos Listados!")
+        				.body(productsListed)
+        		);
     }
 
     // anotacao para dizer que este endpoint é de tipo POST com o path /create
@@ -51,10 +82,18 @@ public class ProdutoController {
     		@ApiResponse(responseCode = "200", description = "Produto criado com Sucesso."),
     		@ApiResponse(responseCode = "400", description = "Erro ao criar produto.")
     })
-    public Produto criar(
+    @Async
+    public CompletableFuture<ResponseEntity<Produto>> createProduct(
     		@Parameter(description = "Dados do Produto", required = true)
     		@RequestBody Produto produto ) {
-        return repository.save(produto);
+    	
+    	Produto productCreate = repository.save(produto);
+    	
+        return CompletableFuture.completedFuture(
+        		ResponseEntity.created(null)
+        		.header("Message", "Produto criado!")
+        		.body(productCreate)
+        		);
     }
 
     
@@ -71,12 +110,28 @@ public class ProdutoController {
     		@ApiResponse(responseCode = "200", description = "Produto encontrado com Sucesso."),
     		@ApiResponse(responseCode = "404", description = "Produto não encontrado.")
     })
-    public ResponseEntity<Produto> buscar(
+    public ResponseEntity<Produto> searchProductById(
     		@Parameter(description = "ID do Produto a ser procurado", required = true)
     		@PathVariable(required = true) Long id ) {
-        return repository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    	
+    	Long count = repository.count();
+    	
+    	Optional<Produto> produtoOptional = repository.findById(id);
+
+    	if (count == 0) {
+    		return ResponseEntity.notFound()
+    				.header("Message", "Nenhum Produto existente!")
+    				.build();
+    	}
+
+    	
+    	return produtoOptional
+                .map(produto -> ResponseEntity.ok()
+                        .header("Message", "Produto encontrado!")
+                        .body(produto))
+                .orElse(ResponseEntity.notFound()
+                		.header("Message", "Produto não encontrado!")
+                		.build());
     }
 
     
@@ -87,22 +142,47 @@ public class ProdutoController {
     		@ApiResponse(responseCode = "200", description = "Produto atualizado com Sucesso."),
     		@ApiResponse(responseCode = "404", description = "Produto nao encontrado")
     })
-    public ResponseEntity<Produto> atualizar(
-    		@Parameter(description = "ID do Produto a ser atualizado.", required = true) 
-    		@PathVariable(required = true) Long id,
-    		@RequestBody Produto produtoAtualizado ) {
-        return repository.findById(id)// pega o produto pelo id no banco de dados
-        		// aqui é uma funcao lambda, onde dentro dela tem o objeto produto que foi pego pelo id
-        		// o objeto que foi encontrdo pelo id é passado para a funcao lambda e seus metodos chamam/recebem os parametros passados pelo corpo da requisicao
+    @Async
+    public CompletableFuture<ResponseEntity<Produto>> updateProductById(
+            @Parameter(description = "ID do Produto a ser atualizado.", required = true) 
+            @PathVariable Long id,
+            @RequestBody Produto produtoAtualizado) {
+
+        // Contagem de produtos (poderia ser útil, mas vamos assumir que não impacta na operação de atualização)
+        Long count = repository.count();
+
+        // Caso não haja produtos no banco de dados, retornamos um "not found"
+        if (count == 0) {
+            return CompletableFuture.completedFuture(
+                    ResponseEntity.notFound()
+                            .header("Message", "Nenhum Produto existente!")
+                            .build()
+            );
+        }
+
+        // Buscar produto pelo id de forma assíncrona
+        return CompletableFuture.supplyAsync(() -> 
+            repository.findById(id) // Pega o produto pelo ID no banco de dados
                 .map(produto -> {
+                    // Atualiza os campos do produto com os dados fornecidos na requisição
                     produto.setNome(produtoAtualizado.getNome());
                     produto.setPreco(produtoAtualizado.getPreco());
-                    // caso ocorra tudo ok, ReponseEntity.ok e salva o objeto com novos dados setados pela variavel que possui a injecao de dependencias  para realizar o "commit"
-                    return ResponseEntity.ok(repository.save(produto));
+
+                    // Salva o produto atualizado
+                    Produto produtoSalvo = repository.save(produto);
+
+                    // Retorna a resposta com o status 201 (Criado) e o produto atualizado
+                    return ResponseEntity.created(null)
+                            .header("Message", "Produto atualizado com sucesso!")
+                            .body(produtoSalvo);
                 })
-                // caso de errado a busca, o ResponseEntity chama uma classe notFound
-                .orElse(ResponseEntity.notFound().build());
+                // Se o produto não for encontrado, retornamos um "not found"
+                .orElse(ResponseEntity.notFound()
+                        .header("Message", "Produto não encontrado!")
+                        .build())
+        );
     }
+
     
     
     // endpoint Delete que recebe parametros pelo caminho/path do endpoint
@@ -113,16 +193,59 @@ public class ProdutoController {
     		@ApiResponse(responseCode = "204", description = "Produto deletado com Sucesso."),
     		@ApiResponse(responseCode = "404", description = "Produto não encontrado.")
     })
-    public ResponseEntity<Void> deletar(
+    @Async
+    public CompletableFuture<ResponseEntity<Void>> deleteProductById(
     		@Parameter(description = "ID do produto a ser deletado", required = true)
     		@PathVariable Long id ) {
     	//caso o id exista, a variavel com injecao de dependencia irá fazer a busca pelo id com a classe existsById()
     	// e apos isso irá deletar pelo id fornecido
+    	
+    	Long count = repository.count();
+    	
+    	if (count == 0) {
+    		return CompletableFuture.completedFuture(ResponseEntity.notFound()
+    				.header("Message", "Nenhum Produto para a exclusão!")
+    				.build());
+    	}
+    	
         if (repository.existsById(id)) {
             repository.deleteById(id);
-            return ResponseEntity.noContent().build();
+            return CompletableFuture.completedFuture(ResponseEntity.noContent() // no Content signifca que nao precisa de retorno, status code 204, deletado com sucesso
+            		.header("Message", "Produto deletado com sucesso!")
+            		.build());
         }
-        // caso de errado a busca, o ResponseEntity chama uma classe notFound
-        return ResponseEntity.notFound().build();
+        // caso de errado a busca, o ResponseEntity chama uma classe notFound, status code 404 -> not Found
+        return CompletableFuture.completedFuture(ResponseEntity.notFound()
+        		.header("Message", "Produto não encontrado!")
+        		.build());
     }
+    
+    
+    @DeleteMapping("/delete")
+    @Operation(summary = "Deletar todos os Produtos", description = "Endpoint para deletar todos os Produtos.")
+    @ApiResponses(value = {
+    		@ApiResponse(responseCode = "204", description = "Produtos deletados com sucesso."),
+    		@ApiResponse(responseCode = "404", description = "Nenhum Produto para a exclusão!")
+    })
+    @Async
+    public CompletableFuture<ResponseEntity<Void>> deleteAllProducts() {
+        // Conta o número de produtos no banco
+        Long count = repository.count();
+        
+        // Se não houver produtos, retorna um código de status 404 (não encontrado)
+        if (count == 0) {
+            return CompletableFuture.completedFuture(ResponseEntity.notFound()
+                    .header("Message", "Nenhum Produto para a exclusão!")
+                    .build());
+        }
+
+        // Se houver produtos, exclui todos e retorna código 204 (sem conteúdo)
+        repository.deleteAll();
+        return CompletableFuture.completedFuture(ResponseEntity.noContent()
+        		.header("Message", "Produtos deletados com sucesso!")
+        		.build());
+    }
+
+    
+    
 }

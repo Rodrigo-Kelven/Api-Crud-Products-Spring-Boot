@@ -2,14 +2,20 @@ package com.exemplo.produto.entity;
 
 import jakarta.persistence.*;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 @Entity
 public class Produto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Faz o banco gerar o ID automaticamente
+    @Schema(description = "ID Product")
     private Long id;
 
+    @Schema(description = "Name Product", example = "Iphone 15")
     private String nome;
+    
+    @Schema(description = "Price Product", example = "2400")
     private Double preco;
 
     // Getters e Setters
