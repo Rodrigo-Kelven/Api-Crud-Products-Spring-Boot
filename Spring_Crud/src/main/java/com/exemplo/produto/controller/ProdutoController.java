@@ -110,7 +110,8 @@ public class ProdutoController {
     		@ApiResponse(responseCode = "200", description = "Produto encontrado com Sucesso."),
     		@ApiResponse(responseCode = "404", description = "Produto não encontrado.")
     })
-    public ResponseEntity<Produto> searchProductById(
+    @Async
+    public CompletableFuture<ResponseEntity<Produto>> searchProductById(
     		@Parameter(description = "ID do Produto a ser procurado", required = true)
     		@PathVariable(required = true) Long id ) {
     	
@@ -119,19 +120,19 @@ public class ProdutoController {
     	Optional<Produto> produtoOptional = repository.findById(id);
 
     	if (count == 0) {
-    		return ResponseEntity.notFound()
+    		return CompletableFuture.completedFuture(ResponseEntity.notFound()
     				.header("Message", "Nenhum Produto existente!")
-    				.build();
+    				.build());
     	}
 
     	
     	return produtoOptional
-                .map(produto -> ResponseEntity.ok()
+                .map(produto -> CompletableFuture.completedFuture(ResponseEntity.ok()
                         .header("Message", "Produto encontrado!")
-                        .body(produto))
-                .orElse(ResponseEntity.notFound()
+                        .body(produto)))
+                .orElse(CompletableFuture.completedFuture(ResponseEntity.notFound()
                 		.header("Message", "Produto não encontrado!")
-                		.build());
+                		.build()));
     }
 
     

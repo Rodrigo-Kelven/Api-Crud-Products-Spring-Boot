@@ -50,10 +50,12 @@ public class HelloController {
 	    @Parameter(description = "Nome do usuário para a saudação", required = true)
 	    @PathVariable(required = true) String name) {
 		
+		String frase = "Rael: Eu estou Embasbacado!";
+		
 		return CompletableFuture.completedFuture(
 				ResponseEntity.ok()
 				.header("Message", "Sucess!")
-				.body("Hello " + name + ", parabens voce descobriu um segredo!!"));
+				.body("Hello " + name + ", parabens voce descobriu um segredo!!, " + frase));
 
 	}
 
