@@ -100,6 +100,14 @@ public class ProdutoController {
     		@Parameter(description = "ID do Produto a ser procurado", required = true)
     		@PathVariable(required = true) Long id ) {
     	
+    	Long count = repository.count();
+    	
+    	if (count == 0) {
+    		return ResponseEntity.noContent()
+    				.header("Message", "Nenhum produto existente!")
+    				.build();
+    	}
+    	
         return repository.findById(id)
                 .map(produto -> ResponseEntity.ok()
                 		.header("Message", "Produto encontrado!")
