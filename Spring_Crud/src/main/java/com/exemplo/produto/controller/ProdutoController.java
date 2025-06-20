@@ -19,7 +19,7 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/api-v1/produtos")
+@RequestMapping("/api-v1/products")
 @Tag(name = "Products", description = "Endpoints API Products")
 public class ProdutoController {
 
