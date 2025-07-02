@@ -97,7 +97,7 @@ public class ProdutoService {
                 })
                 // caso de errado a busca, o ResponseEntity chama uma classe notFound
                 .orElse(ResponseEntity.notFound()
-                		.header("Message", "Product Not Found")
+                		.header("Message", "Produto não encontrado.")
                 		// ja o metodo .build() serve para resposta que nao precisem de corpo, somente o cabecalho HTTP
                 		// exemplo status code: 204, 404
                 		.build());

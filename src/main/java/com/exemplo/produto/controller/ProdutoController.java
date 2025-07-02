@@ -57,7 +57,7 @@ public class ProdutoController {
     // de tipo de retorno Produto, a funcao recebe parametros, logo, o Spring disponibiliza uma anotacao @RequestBody, que significa que irá receber parametros do body,
     // parametros esses de tipo Produto, onde a variavel produto recebe e realiza o save() que de forma automatica o spring com o JPARepository cuida disso
     @PostMapping("/create")
-    @Operation(summary = "Criacao de Produtos", description = "Endpoint para a criação de Produtos.")
+    @Operation(summary = "Criar Produtos", description = "Endpoint para a criação de Produtos.")
     @ApiResponses(value = {
     		@ApiResponse(responseCode = "200", description = "Produto criado com Sucesso."),
     		@ApiResponse(responseCode = "400", description = "Erro ao criar produto.")
