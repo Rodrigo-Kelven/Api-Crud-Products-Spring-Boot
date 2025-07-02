@@ -21,6 +21,26 @@
 - PgAdmin: Interface para o banco de dados PostGreSQL
 - Docker: Conteirização do banco de dados e de seua interface
 
+### Estrutura do Projeto.
+        src/
+        └── main
+            ├── java
+            │   └── com
+            │       └── exemplo
+            │           └── produto
+            │               ├── controller
+            │               │   ├── HelloController.java
+            │               │   └── ProdutoController.java
+            │               ├── entity
+            │               │   └── Produto.java
+            │               ├── ProdutoCrudApplication.java
+            │               ├── repository
+            │               │   └── ProdutoRepository.java
+            │               └── service
+            │                   └── ProdutoService.java
+            └── resources
+                └── application.properties
+
 ### Como rodar:
 - #### Subir o banco e sua interfaçe em container:
         docker compose up
