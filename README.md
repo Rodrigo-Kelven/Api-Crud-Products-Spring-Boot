@@ -8,7 +8,7 @@
 
 
 
-### Versão 0.0.2
+### Versão 0.0.3
 #### Esta api receberá atualizações e será mais documentada e em breve, ela fará parte de um conjunto de micro serviços.
 
 
