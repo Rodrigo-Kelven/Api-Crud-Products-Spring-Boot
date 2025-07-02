@@ -28,6 +28,8 @@
             │   └── com
             │       └── exemplo
             │           └── produto
+            │               ├── config
+            │               │   └── SwaggerConfig.java
             │               ├── controller
             │               │   ├── HelloController.java
             │               │   └── ProdutoController.java
@@ -40,7 +42,8 @@
             │                   └── ProdutoService.java
             └── resources
                 └── application.properties
-
+                
+        
 ### Como rodar:
 - #### Subir o banco e sua interfaçe em container:
         docker compose up
