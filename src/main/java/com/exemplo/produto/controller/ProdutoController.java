@@ -1,38 +1,41 @@
 package com.exemplo.produto.controller;
 
-import com.exemplo.produto.entity.Produto;
-import com.exemplo.produto.repository.ProdutoRepository;
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.exemplo.produto.entity.Produto;
+import com.exemplo.produto.service.ProdutoService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jdk.jshell.Snippet.Status;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpHeaders;
-
-
-import java.util.List;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/produtos")
+@Tag(name = "API Produto Crud", description = "Operações relacionadas aos produtos.")
 public class ProdutoController {
 
-    // variavel que recebe as dependencias JPA injetadas em ProdutoRepository
-    private final ProdutoRepository repository;
 
-    // Criando uma “conexão lógica” com o banco de dados
-    // Aqui, a variável repository é a referência do objeto injetado pelo Spring,
-    // que sabe como acessar o banco por trás dos panos.
-    public ProdutoController(ProdutoRepository repository) {
-        this.repository = repository;
+	// injecao de denpendencias de service
+    private final ProdutoService service;
+    
+    public ProdutoController(ProdutoService service) {
+        this.service = service;
     }
     
     
-
+    
     // anotacao para dizer que este endpoint é de tipo GET com o path /list
     // como em java tudo sao classes e funcoes, esta funcao retorna os dados cadastrados, como esta funcao retorna algo, precisa de um tipo de parametro de retorno
     // logo usa-se a interface List<> com o tipo de parametro Produto -> List<Produto> 
@@ -43,27 +46,13 @@ public class ProdutoController {
     		@ApiResponse(responseCode = "200", description = "Retornado com Sucesso."),
     		@ApiResponse(responseCode = "404", description = "Nenhum Produto enconteado.")
     })
-    public ResponseEntity<List<Produto>> listar() {
+    public ResponseEntity<List<Produto>> listarProdutoController() {
     	
-    	long count = repository.count();
-    	
-    	if (count == 0) {
-    		return ResponseEntity.status(HttpStatus.NOT_FOUND)
-    				.header("Message", "Nenhum produto encontrado!")
-                    .build();
-    	}
-    	
-    	// Cria os cabeçalhos personalizados
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Messagem", "Produtos Retornados.");  // Adiciona o cabeçalho personalizado
-    	
-    	List<Produto> produtos = repository.findAll();
-        return ResponseEntity.ok()
-        		// aqui precisa ser .headers() O .headers() é um método mais flexível que permite adicionar múltiplos cabeçalhos de uma vez
-        		.headers(headers)
-        		.body(produtos);
+    	return service.listarProdutosService();
+    
     }
-
+    
+    
     // anotacao para dizer que este endpoint é de tipo POST com o path /create
     // de tipo de retorno Produto, a funcao recebe parametros, logo, o Spring disponibiliza uma anotacao @RequestBody, que significa que irá receber parametros do body,
     // parametros esses de tipo Produto, onde a variavel produto recebe e realiza o save() que de forma automatica o spring com o JPARepository cuida disso
@@ -73,16 +62,13 @@ public class ProdutoController {
     		@ApiResponse(responseCode = "200", description = "Produto criado com Sucesso."),
     		@ApiResponse(responseCode = "400", description = "Erro ao criar produto.")
     })
-    public ResponseEntity<Produto> criar(
+    public ResponseEntity<Produto> criarProdutoController(
     		@Parameter(description = "Dados do Produto", required = true)
     		@RequestBody Produto produto ) {
-	        Produto produtoCreate = repository.save(produto);
-	        return ResponseEntity.ok()
-	        			.header("Message", "Produto criado com sucesso!")
-	        			.body(produtoCreate);
+	        return service.createProdutoService(produto);
     }
 
-    
+
     // anotacao para dizer que este endpoint é de tipo GET com o path /search/{id}
     // a anotacao PathVariable diz que um parametro virá do path->caminho/url, este parametro é de tipo Lonf com o nome de id
     // ResponseEntity é uma classe do Spring que representa toda a resposta HTTP, incluindo status, cabeçalhos e corpo.
@@ -96,25 +82,10 @@ public class ProdutoController {
     		@ApiResponse(responseCode = "200", description = "Produto encontrado com Sucesso."),
     		@ApiResponse(responseCode = "404", description = "Produto não encontrado.")
     })
-    public ResponseEntity<Produto> buscar(
-    		@Parameter(description = "ID do Produto a ser procurado", required = true)
-    		@PathVariable(required = true) Long id ) {
+    public ResponseEntity<Produto> buscarProdutoByIdController(
+    		@Parameter(description = "ID do Produto a ser procurado", required = true) Long id) {
     	
-    	Long count = repository.count();
-    	
-    	if (count == 0) {
-    		return ResponseEntity.noContent()
-    				.header("Message", "Nenhum produto existente!")
-    				.build();
-    	}
-    	
-        return repository.findById(id)
-                .map(produto -> ResponseEntity.ok()
-                		.header("Message", "Produto encontrado!")
-                		.body(produto))
-                .orElse(ResponseEntity.notFound()
-                		.header("Message", "Produto não encontrado!")
-                		.build());
+    	return service.searchProdutoById(id);
     }
 
     
@@ -125,34 +96,14 @@ public class ProdutoController {
     		@ApiResponse(responseCode = "200", description = "Produto atualizado com Sucesso."),
     		@ApiResponse(responseCode = "404", description = "Produto nao encontrado")
     })
-    public ResponseEntity<Produto> atualizar(
+    public ResponseEntity<Produto> atualizarProdutoByIdController(
     		@Parameter(description = "ID do Produto a ser atualizado.", required = true) 
     		@PathVariable(required = true) Long id,
     		@RequestBody Produto produtoAtualizado ) {
-        return repository.findById(id)// pega o produto pelo id no banco de dados
-        		// aqui é uma funcao lambda, onde dentro dela tem o objeto produto que foi pego pelo id
-        		// o objeto que foi encontrdo pelo id é passado para a funcao lambda e seus metodos chamam/recebem os parametros passados pelo corpo da requisicao
-                .map(produto -> {
-                    produto.setNome(produtoAtualizado.getNome());
-                    produto.setPreco(produtoAtualizado.getPreco());
-                    
-                    // caso ocorra tudo ok, ReponseEntity.ok e salva o objeto com novos dados setados pela variavel que possui a injecao de dependencias  para realizar o "commit"
-                    Produto produtoSalvo = repository.save(produto);
-                    
-                    return ResponseEntity.ok()
-                    		.header("Message", "Produto atualizado com sucesso!")
-                    		// o metodo .body() serve para o retorno de resposa com corpo na resposa do cabeçalho HTTP
-                    		// exemplo status code: 201
-                    		.body(produtoSalvo);
-                })
-                // caso de errado a busca, o ResponseEntity chama uma classe notFound
-                .orElse(ResponseEntity.notFound()
-                		.header("Message", "Product Not Found")
-                		// ja o metodo .build() serve para resposta que nao precisem de corpo, somente o cabecalho HTTP
-                		// exemplo status code: 204, 404
-                		.build());
+    	
+    	return service.updateProdutoService(id, produtoAtualizado);
+        
     	}
-    
     
     // endpoint Delete que recebe parametros pelo caminho/path do endpoint
     // ResponseEntity por ser uma resposta HTTP,status e corpo, retorna void, somente o status code ser retornado
@@ -162,32 +113,14 @@ public class ProdutoController {
     		@ApiResponse(responseCode = "204", description = "Produto deletado com Sucesso."),
     		@ApiResponse(responseCode = "404", description = "Produto não encontrado.")
     })
-    public ResponseEntity<Void> deletar(
+    public ResponseEntity<Void> deletarProdutoByIdController(
     		@Parameter(description = "ID do produto a ser deletado", required = true)
     		@PathVariable Long id ) {
-    	//caso o id exista, a variavel com injecao de dependencia irá fazer a busca pelo id com a classe existsById()
-    	// e apos isso irá deletar pelo id fornecido
-        if (repository.existsById(id)) {
-            repository.deleteById(id);
-         // noContent() significa o status Code 204, exclusao, se o id existir deleta e retorna o status Code 204 para informar que a exclusao foi bem suscedida
-            return ResponseEntity.noContent()
-            		.header("Message", "Produto deletado com sucesso!")
-            		.build();
-        }
-        
-        long count = repository.count();
-        if (count == 0) {
-            // Caso não haja produtos, retorna 404 Not Found com uma mensagem
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                                 .header("Message", "Nenhum produto encontrado para exclusão.")
-                                 .build();
-        }
-        
-        // caso de errado a busca, o ResponseEntity chama uma classe notFound(), que retorna o erro 404
-        return ResponseEntity.notFound()
-        		.header("Message", "Produto não encontrado!")
-        		.build();
+    	
+    	return service.deletarProdutoById(id);
+    	
     }
+
     
     @DeleteMapping("/delete")
     @Operation(summary = "Deletar todos os Produtos", description = "Endpoint para deletar todos os Produtos")
@@ -195,23 +128,11 @@ public class ProdutoController {
         @ApiResponse(responseCode = "204", description = "Produtos apagados com Sucesso."),
         @ApiResponse(responseCode = "404", description = "Nenhum Produto encontrado.")
     })
-    public ResponseEntity<Void> deletarAll() {
-        // Verifique se existem produtos na base de dados
-        long count = repository.count();
-        if (count == 0) {
-            // Caso não haja produtos, retorna 404 Not Found com uma mensagem
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                                 .header("Message", "Nenhum produto encontrado para exclusão.")
-                                 .build();
-        }
-        
-        // Caso haja produtos, deleta todos
-        repository.deleteAll();
-        return ResponseEntity.noContent()
-        		.header("Message", "Produtos deletados com sucesso!")
-        		.build();  // Retorna 204 No Content quando a exclusão for bem-sucedida
+    public ResponseEntity<Void> deletarProdutosAllController() {
+       
+    	return service.deleteProdutoAll();
+    	
     }
-
 
     
     
