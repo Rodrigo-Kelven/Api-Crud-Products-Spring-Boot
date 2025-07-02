@@ -29,17 +29,17 @@
             │       └── exemplo
             │           └── produto
             │               ├── config
-            │               │   └── SwaggerConfig.java
+            │               │   └── SwaggerConfig.java -> Config do Swagger
             │               ├── controller
-            │               │   ├── HelloController.java
-            │               │   └── ProdutoController.java
+            │               │   ├── HelloController.java -> Controllers para verificação do estado da API
+            │               │   └── ProdutoController.java -> Controllers para realização de operações com produtos
             │               ├── entity
-            │               │   └── Produto.java
-            │               ├── ProdutoCrudApplication.java
+            │               │   └── Produto.java -> Entidade/Modelo dos Objetos(Produtos)
+            │               ├── ProdutoCrudApplication.java -> Classe Main da aplicação
             │               ├── repository
-            │               │   └── ProdutoRepository.java
+            │               │   └── ProdutoRepository.java -> Interface para a injeção de dependência da aplicação
             │               └── service
-            │                   └── ProdutoService.java
+            │                   └── ProdutoService.java -> Camada de abstração para servir as realização de operações
             └── resources
                 └── application.properties
                 
