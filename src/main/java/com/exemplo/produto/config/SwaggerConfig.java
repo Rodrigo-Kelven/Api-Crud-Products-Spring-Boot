@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.info.Info;
 @Configuration
 @OpenAPIDefinition(
     info = @Info(
-        title = "API de Produtos",
+        title = "API Management Products",
         description = "API para gerenciar produtos",
         version = "0.0.3"
     )
@@ -18,21 +18,16 @@ import io.swagger.v3.oas.annotations.info.Info;
 public class SwaggerConfig {
 
     // Configuração do grupo de produtos
+	// corrigir depois, nao sei porque nao funciona ao colocar outras tags de outros endpoints
+	/*
     @Bean
     public GroupedOpenApi produtoApi() {
         return GroupedOpenApi.builder()
-                .group("produtos")
-                .pathsToMatch("/produtos/**")
+                .group("API Produto")
+                .pathsToMatch("/api/v1/produtos/**")
                 .build();
     }
-    
-    @Bean
-    public GroupedOpenApi HelloApi() {
-        return GroupedOpenApi.builder()
-                .group("Hello")
-                .pathsToMatch("/**")
-                .build();
-    }
+    */
 
-    
+	
 }
