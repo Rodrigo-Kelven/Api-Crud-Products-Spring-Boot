@@ -52,7 +52,9 @@
 
 
 ### Para acessar o swagger da API
-        http://127.0.0.1:8080/swagger-ui/index.
+        http://127.0.0.1:8080/api/v1/swagger-ui/index.html
+        http://127.0.0.1:8080/api/v1/docs
+
 
 ### Para acessar o PgAdmin (Interface do Banco de Dados) PostGreSQL
         http://127.0.0.1:8081/login?next=/
