@@ -22,26 +22,28 @@
 - Docker: Conteirização do banco de dados e de seua interface
 
 ### Estrutura do Projeto.
-        src/
-        └── main
-            ├── java
-            │   └── com
-            │       └── exemplo
-            │           └── produto
-            │               ├── config
-            │               │   └── SwaggerConfig.java -> Config do Swagger
-            │               ├── controller
-            │               │   ├── HelloController.java -> Controllers para verificação do estado da API
-            │               │   └── ProdutoController.java -> Controllers para realização de operações com produtos
-            │               ├── entity
-            │               │   └── Produto.java -> Entidade/Modelo dos Objetos(Produtos)
-            │               ├── ProdutoCrudApplication.java -> Classe Main da aplicação
-            │               ├── repository
-            │               │   └── ProdutoRepository.java -> Interface para a injeção de dependência da aplicação
-            │               └── service
-            │                   └── ProdutoService.java -> Camada de abstração para servir as realização de operações
-            └── resources
-                └── application.properties
+            ├── src
+            │   ├── main
+            │   │   ├── java
+            │   │   │   └── br
+            │   │   │       └── com
+            │   │   │           └── dicume
+            │   │   │               └── springboot
+            │   │   │                   ├── controllers
+            │   │   │                   │   └── ProductController.java
+            │   │   │                   ├── dtos
+            │   │   │                   │   └── ProductRecordDto.java
+            │   │   │                   ├── models
+            │   │   │                   │   └── ProductModel.java
+            │   │   │                   ├── repositories
+            │   │   │                   │   └── ProductRepository.java
+            │   │   │                   ├── services
+            │   │   │                   │   └── ProductService.java
+            │   │   │                   └── SpringbootApplication.java
+            │   │   └── resources
+            │   │       ├── application.properties
+            │   │       └── banner.txt
+
                 
         
 ### Como rodar:
