@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import br.com.dicume.springboot.dtos.ProductRecordDto;
+import br.com.dicume.springboot.exception.ResourceNotFoundException;
 import br.com.dicume.springboot.models.ProductModel;
 import br.com.dicume.springboot.repositories.ProductRepository;
 
@@ -57,9 +58,7 @@ public class ProductService {
             		.header("X-Custom-Header", "Produto encontrado com sucesso!")
                     .body(product.get());
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-	        		.header("X-Custom-Header", "Produto não encontrado!")
-	        		.build(); // 404 Not Found
+        	throw new ResourceNotFoundException("Produto não encontrado!");
         }
     }
     
@@ -71,13 +70,11 @@ public class ProductService {
      */
     public ResponseEntity<List<ProductModel>> serviceGetAllProducts() {
         List<ProductModel> products = productRepository.findAll();
-     // Verifica se há produtos na base de dados
+        // Verifica se há produtos na base de dados
 	    long productCount = productRepository.count();
 	    if (productCount == 0) {
 	        // Se não houver produtos, retorna um código 404 (Não Encontrado)
-	        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-	        		.header("X-Custom-Header", "Nenhum produto encontrado!")
-	        		.build(); // 404 Not Found
+	    	throw new ResourceNotFoundException("Nenhum produto encontrado!");
 	    }
         return ResponseEntity.status(HttpStatus.OK)
         		.header("X-Custom-Header", "Produtos listados com sucesso!")
@@ -100,9 +97,7 @@ public class ProductService {
         Optional<ProductModel> existingProduct = productRepository.findById(id);
 
         if (existingProduct.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-	        		.header("X-Custom-Header", "Produto não encontrado!")
-	        		.build(); // 404 Not Found
+        	throw new ResourceNotFoundException("Produto não encontrado!");
         }
 
         // Update the existing product with the new data
@@ -130,9 +125,7 @@ public class ProductService {
         Optional<ProductModel> product = productRepository.findById(id);
 
         if (product.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-	        		.header("X-Custom-Header", "Produto não encontrado!")
-	        		.build(); // 404 Not Found
+        	throw new ResourceNotFoundException("Produto não encontrado!");
         }
 
         // Delete the product
@@ -150,26 +143,19 @@ public class ProductService {
      * @return ResponseEntity indicating success or failure of the delete operation.
      */
     public ResponseEntity<Void> serviceDeleteAllProducts() {
-    	try {
-    	    // Verifica se há produtos na base de dados
-    	    long productCount = productRepository.count();
-    	    if (productCount == 0) {
-    	        // Se não houver produtos, retorna um código 404 (Não Encontrado)
-    	        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-    	        		.header("X-Custom-Header", "Produtos não encontrados!")
-    	        		.build(); // 404 Not Found
-    	    }
-
-    	    // Deleta todos os produtos
-    	    productRepository.deleteAll();
-    	    return ResponseEntity.status(HttpStatus.NO_CONTENT)
-            		.header("X-Custom-Header", "Produtos deletados com sucesso!!")
-            		.build(); // 204 Not Found
-
-    	} catch (Exception e) {
-    	    // Em caso de erro, retorna 500 (Internal Server Error)
-    	    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    	}
+        // Verifica se há produtos na base de dados
+	    long productCount = productRepository.count();
+	    if (productCount == 0) {
+	        // Se não houver produtos, retorna um código 404 (Não Encontrado)
+	    	throw new ResourceNotFoundException("Nenhum produto encontrado!");
+	    }
+	    
+	    // Deleta todos os produtos
+	    productRepository.deleteAll();
+	    return ResponseEntity.status(HttpStatus.NO_CONTENT)
+        		.header("X-Custom-Header", "Produtos deletados com sucesso!!")
+        		.build(); // 204 Not Found
+	    
 
         
     }
