@@ -39,7 +39,7 @@ public class ProductService {
 
         // Return the saved product with UUID
         return ResponseEntity.status(HttpStatus.CREATED)
-        		.header("X-Custom-Header", "Produto Cadastrado com sucesso!")
+        		.header("X-Custom-Header", "Produto cadastrado com sucesso!")
                 .body(savedProduct);
     }
     
