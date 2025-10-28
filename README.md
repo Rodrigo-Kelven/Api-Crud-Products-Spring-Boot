@@ -48,10 +48,6 @@
             │   │   │                   ├── services
             │   │   │                   │   └── ProductService.java
             │   │   │                   └── SpringbootApplication.java
-            │   │   └── resources
-            │   │       ├── application.properties
-            │   │       └── banner.txt
-
                 
         
 ### Como rodar:
