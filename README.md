@@ -16,7 +16,12 @@
 
 - Java: Linguagem utilizada na construção da API.
 - Spring Boot: Framework utilizado para a construção da API.
-- Spring JPA: Injeção de dependencias
+- Spring Boot JPA: Injeção de dependencias
+- Spring Boot validation: Para validações
+- Spring Boot starter-web: Para start do server web
+- Spring Boot SpringDoc Openapi Starter Webmvc-ui: Para utilização do Swagger da API
+- Spring Boot devtools: Para reload automático
+- Spring Boot Starter Test: Para realização de testes automatizados
 - PostGreSQL: Banco de dados
 - PgAdmin: Interface para o banco de dados PostGreSQL
 - Docker: Conteirização do banco de dados e de seua interface
