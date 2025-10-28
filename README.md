@@ -34,6 +34,8 @@
             │   │   │       └── com
             │   │   │           └── dicume
             │   │   │               └── springboot
+            │   │   │                   ├── config
+            │   │   │                   │   └── OpenApiConfig.java
             │   │   │                   ├── controllers
             │   │   │                   │   └── ProductController.java
             │   │   │                   ├── dtos
