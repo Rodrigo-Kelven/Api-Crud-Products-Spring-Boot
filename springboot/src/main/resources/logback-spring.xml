@@ -5,14 +5,10 @@
     <logger name="org.springframework" level="INFO"/>
     <logger name="com.dicume" level="INFO"/>
 
-    <!-- Padrão de formato de log -->
-    <patternLayout>
-        <pattern>%d{yyyy-MM-dd HH:mm:ss} - %level - %logger{36} - %msg%n</pattern>
-    </patternLayout>
-
     <!-- Appender para o console -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
+            <!-- Padrão de formato de log -->
             <pattern>%d{yyyy-MM-dd HH:mm:ss} - %level - %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
