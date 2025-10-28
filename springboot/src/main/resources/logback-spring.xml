@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Definindo os níveis de log específicos para pacotes -->
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="com.dicume" level="INFO"/>
+
+    <!-- Padrão de formato de log -->
+    <patternLayout>
+        <pattern>%d{yyyy-MM-dd HH:mm:ss} - %level - %logger{36} - %msg%n</pattern>
+    </patternLayout>
+
+    <!-- Appender para o console -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %level - %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Appender para logs do Spring -->
+    <appender name="SPRING_LOG_FILE" class="ch.qos.logback.core.FileAppender">
+        <file>logs/spring.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %level - %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Appender para logs do seu projeto com rotação de logs -->
+    <appender name="DICUME_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/dicume.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/dicume.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory> <!-- Retém logs por 30 dias -->
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %level - %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Appender para um log geral (todas as mensagens) -->
+    <appender name="GENERAL_LOG_FILE" class="ch.qos.logback.core.FileAppender">
+        <file>logs/application.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %level - %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Raiz do logger (logs gerais, por padrão INFO) -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="GENERAL_LOG_FILE"/>
+    </root>
+
+    <!-- Direcionando logs específicos para seus respectivos arquivos -->
+    <logger name="org.springframework" level="INFO">
+        <appender-ref ref="SPRING_LOG_FILE"/>
+    </logger>
+
+    <logger name="com.dicume" level="INFO">
+        <appender-ref ref="DICUME_LOG_FILE"/>
+    </logger>
+
+</configuration>
