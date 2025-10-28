@@ -33,6 +33,9 @@
             │   │   │                   │   └── ProductController.java
             │   │   │                   ├── dtos
             │   │   │                   │   └── ProductRecordDto.java
+            │   │   │                   ├── exception
+            │   │   │                   │   ├── GlobalExceptionHandler.java
+            │   │   │                   │   └── ResourceNotFoundException.java
             │   │   │                   ├── models
             │   │   │                   │   └── ProductModel.java
             │   │   │                   ├── repositories
