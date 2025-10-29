@@ -18,6 +18,7 @@
 
 - Java: Linguagem utilizada na construção da API.
 - Mavem: Para o gerenciamento de dependências
+- JUnit: Para Tests
 - Spring Boot: Framework utilizado para a construção da API.
 - Spring Boot JPA: Injeção de dependencias
 - Spring Boot validation: Para validações
