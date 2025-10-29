@@ -3,7 +3,6 @@ package br.com.dicume.springboot;
 import org.springframework.boot.SpringApplication;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,7 +12,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @SpringBootApplication
-@ComponentScan(basePackages = "br.com.dicume.springboot")
 @RestController
 public class SpringbootApplication {
 
