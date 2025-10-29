@@ -19,7 +19,7 @@ jobs:
       with:
         java-version: '21'
         distribution: 'temurin'
-        cache: false
+        cache: maven  # O correto é "maven", e não apenas "true", para usar o cache Maven
 
     - name: Build and run tests with Maven
       run: mvn clean verify -B --file springboot/pom.xml  # 'verify' executa os testes
