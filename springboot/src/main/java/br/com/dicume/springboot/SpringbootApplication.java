@@ -27,7 +27,7 @@ public class SpringbootApplication {
         @ApiResponse(responseCode = "400", description = "Requisição inválida")
     })
     public String hello() {
-        return "Olá, mundo!";
+        return "API Ok!";
     }
 
 }
