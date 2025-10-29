@@ -2,28 +2,31 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+    # 1. Check out o código
     - name: Check out repository
       uses: actions/checkout@v4
     
+    # 2. Configura o JDK (versão 21, ou a versão desejada)
     - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
         java-version: '21'
-        distribution: 'temurin'
-        cache: maven  # O correto é "maven", e não apenas "true", para usar o cache Maven
+        distribution: 'temurin'  # ou outra distribuição JDK, se preferir
+        cache: true  # Habilitar cache de dependências Maven
 
-    - name: Build and run tests with Maven
-      run: mvn clean verify -B --file springboot/pom.xml  # 'verify' executa os testes
+    # 3. Executa o build e os testes com Maven em modo de depuração
+    - name: Build and run tests with Maven (debug mode)
+      run: mvn clean verify -X -B --file springboot/pom.xml
 
-    # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
+    # 4. Atualiza o gráfico de dependências no GitHub (opcional)
     - name: Update dependency graph
       uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
