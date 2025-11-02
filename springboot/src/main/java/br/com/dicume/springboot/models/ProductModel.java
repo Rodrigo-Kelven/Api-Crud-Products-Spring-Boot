@@ -2,6 +2,7 @@ package br.com.dicume.springboot.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.io.Serializable;
@@ -12,11 +13,17 @@ import br.com.dicume.springboot.dtos.ProductRecordDto;
 
 @Entity
 @Table(name = "TB_PRODUCTS")
-public class ProductModel implements Serializable{
-	private static final long serialVersionUID = 1L;
+public class ProductModel implements Serializable{ 
+	// Serializable é uma interface que indica que a classe ProductModel que é uma tabela, pode ser serializada.  
+	private static final long serialVersionUID = 1L; // ID de controle da JVM para as serializacoes conforma nescessários.
+	/*
+	 * A estratégia GenerationType.AUTO faz com que o provedor de persistência (como Hibernate) escolha automaticamente 
+	 * a melhor estratégia de geração de chave primária com base no banco de dados em uso
+	*/
+	
 	
 	@Id
-	@GeneratedValue(generator = "UUID")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;
 	private String name;
 	private BigDecimal value;
@@ -39,9 +46,7 @@ public class ProductModel implements Serializable{
 	public UUID getId() {
 		return id;
 	}
-	public void setId(UUID id) {
-		this.id = id;
-	}
+
 	public String getName() {
 		return name;
 	}
