@@ -16,6 +16,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 @RestController
 @RequestMapping("/api/v1/products")
 @Tag(name = "API Products", description = "Operations relational of Products API")
@@ -52,14 +56,19 @@ public class ProductController {
 
     
     @GetMapping("/")
-    @Operation(summary = "Get all products", description = "Fetches a list of all products in the system.")
+    @Operation(summary = "Get all products", description = "Fetches a paginated list of all products in the system.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "List of products returned"),
+        @ApiResponse(responseCode = "404", description = "No products found"),
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<List<ProductModel>> getAllProducts() {
-    	return productService.serviceGetAllProducts();
+    public ResponseEntity<Page<ProductModel>> getAllProducts(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
+        return productService.serviceGetAllProducts(PageRequest.of(page, size));
     }
+
+
 
     
     
