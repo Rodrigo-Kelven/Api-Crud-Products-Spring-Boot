@@ -107,7 +107,7 @@ public class ProductService {
     
     public ResponseEntity<List<ProductModel>> serviceGetProductsByPriceRange(BigDecimal min, BigDecimal max) {
         // Filtra os produtos pela faixa de preço usando BigDecimal
-        List<ProductModel> products = productRepository.findByValueBetween(min, max);
+        List<ProductModel> products = productRepository.findByPriceBetween(min, max);
         
         if (products.isEmpty()) {
             throw new ResourceNotFoundException("Nenhum produto encontrado na faixa de preço informada.");
@@ -142,7 +142,7 @@ public class ProductService {
         // Update the existing product with the new data
         ProductModel productToUpdate = existingProduct.get();
         productToUpdate.setName(productRecordDto.name());
-        productToUpdate.setValue(productRecordDto.value());
+        productToUpdate.setPrice(productRecordDto.price());
 
         // Save the updated product
         ProductModel updatedProduct = productRepository.save(productToUpdate);

@@ -1,6 +1,8 @@
 package br.com.dicume.springboot.models;
 
 import jakarta.persistence.Entity;
+import lombok.Getter;
+import lombok.Setter;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,6 +15,8 @@ import br.com.dicume.springboot.dtos.ProductRecordDto;
 
 @Entity
 @Table(name = "TB_PRODUCTS")
+@Getter
+@Setter
 public class ProductModel implements Serializable{ 
 	// Serializable é uma interface que indica que a classe ProductModel que é uma tabela, pode ser serializada.  
 	private static final long serialVersionUID = 1L; // ID de controle da JVM para as serializacoes conforma nescessários.
@@ -26,17 +30,17 @@ public class ProductModel implements Serializable{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;
 	private String name;
-	private BigDecimal value;
+	private BigDecimal price;
 	
 	// Construtor que recebe o DTO
-    public ProductModel(String name, BigDecimal value) {
+    public ProductModel(String name, BigDecimal price) {
         this.name = name;
-        this.value = value;
+        this.price = price;
     }
 
     // Método para converter DTO para modelo
     public static ProductModel fromDto(ProductRecordDto dto) {
-        return new ProductModel(dto.name(), dto.value());
+        return new ProductModel(dto.name(), dto.price());
     }
     
  // Construtor vazio para JPA
@@ -53,11 +57,11 @@ public class ProductModel implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-	public BigDecimal getValue() {
-		return value;
+	public BigDecimal getPrice() {
+		return price;
 	}
-	public void setValue(BigDecimal value) {
-		this.value = value;
+	public void setPrice(BigDecimal price) {
+		this.price = price;
 	}
 	
 }

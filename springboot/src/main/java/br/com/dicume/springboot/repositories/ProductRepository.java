@@ -11,5 +11,5 @@ import br.com.dicume.springboot.models.ProductModel;
 @Repository
 public interface ProductRepository extends JpaRepository<ProductModel, UUID>{
 	// Método para buscar produtos dentro de um intervalo de preço usando BigDecimal
-    List<ProductModel> findByValueBetween(BigDecimal min, BigDecimal max);
+    List<ProductModel> findByPriceBetween(BigDecimal min, BigDecimal max);
 }
