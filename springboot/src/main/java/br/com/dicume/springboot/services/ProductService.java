@@ -13,6 +13,7 @@ import br.com.dicume.springboot.exception.ResourceNotFoundException;
 import br.com.dicume.springboot.models.ProductModel;
 import br.com.dicume.springboot.repositories.ProductRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -101,6 +102,20 @@ public class ProductService {
         return ResponseEntity.status(HttpStatus.OK)
                 .header("X-Custom-Header", "Produtos listados com sucesso!")
                 .body(productsPage);
+    }
+    
+    
+    public ResponseEntity<List<ProductModel>> serviceGetProductsByPriceRange(BigDecimal min, BigDecimal max) {
+        // Filtra os produtos pela faixa de preço usando BigDecimal
+        List<ProductModel> products = productRepository.findByValueBetween(min, max);
+        
+        if (products.isEmpty()) {
+            throw new ResourceNotFoundException("Nenhum produto encontrado na faixa de preço informada.");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .header("X-Custom-Header", "Produtos encontrados na faixa de preço!")
+                .body(products);
     }
 
 

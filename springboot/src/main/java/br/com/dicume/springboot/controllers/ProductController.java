@@ -13,12 +13,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -67,7 +67,24 @@ public class ProductController {
             @RequestParam(value = "size", defaultValue = "10") int size) {
         return productService.serviceGetAllProducts(PageRequest.of(page, size));
     }
-
+    
+    
+    @GetMapping("/search-for-price")
+    @Operation(summary = "Get products by price range", description = "Fetches products within a given price range.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "List of products returned"),
+        @ApiResponse(responseCode = "404", description = "No products found within the given price range"),
+        @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<List<ProductModel>> getProductsByPriceRange(
+            @RequestParam(value = "minPrice") float minPrice, 
+            @RequestParam(value = "maxPrice") float maxPrice) {
+        // Convertendo os parâmetros Double para BigDecimal
+        BigDecimal min = new BigDecimal(minPrice);
+        BigDecimal max = new BigDecimal(maxPrice);
+        
+        return productService.serviceGetProductsByPriceRange(min, max);
+    }
 
 
     
