@@ -70,13 +70,37 @@
 
 ### Para acessar o PgAdmin (Interface do Banco de Dados) PostGreSQL
         http://127.0.0.1:8081/login?next=/
+    
+    Dados: {
+        email: admin@admin.com
+        senha: admin
+        server -> register -> geral
+            nome: db
+            maintance database: dicumeproductsdb
+            username: postgres
+            senha: postgres
+    }
 
 ### Para acessar a interface do SonarQube
         http://127.0.0.1:9000/
 
+    Dados: {
+        Login: admin
+        Senha: admin
+
+        "Precisa mudar a senha! E gerar um token para exportar!"
+        My Account -> Security -> Generate Tokens
+
+        "No terminal": export SONAR_TOKEN=token_gerado
+    }
+
 ### Para acessar a interface do RabbitMQ
         http://127.0.0.1:15672/
 
+    Dados: {
+        Login: guest
+        Senha: guest
+    }
 
 ### Contribuições
 
