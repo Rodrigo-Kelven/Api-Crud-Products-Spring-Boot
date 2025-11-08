@@ -29,6 +29,7 @@
 - PostGreSQL: Banco de dados
 - PgAdmin: Interface para o banco de dados PostGreSQL
 - Docker: Conteirização do banco de dados e de seua interface
+- SonarQube: Para verificação e qualidade de código.
 
 ### Estrutura do Projeto.
             ├── src
