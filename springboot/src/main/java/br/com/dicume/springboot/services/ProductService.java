@@ -28,6 +28,7 @@ public class ProductService {
     private ProductRepository productRepository;
     
     
+    
     /**
      * Create a new product.
      *
@@ -47,6 +48,7 @@ public class ProductService {
                 .body(savedProduct);
     }
     
+        
     
     /**
      * Get a product by its ID.
@@ -116,6 +118,49 @@ public class ProductService {
         return ResponseEntity.status(HttpStatus.OK)
                 .header("X-Custom-Header", "Produtos encontrados na faixa de preço!")
                 .body(products);
+    }
+    
+    
+    public ResponseEntity<List<ProductModel>> serviceGetProductsByName(String name){
+    	List<ProductModel> products = productRepository.findByName(name);
+    	
+    	if (products.isEmpty()) {
+            throw new ResourceNotFoundException("Nenhum produto encontrado com base no nome sugerido.");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .header("X-Custom-Header", "Produtos encontrados com base no nome sugerido!")
+                .body(products);
+    	
+    }
+    
+    
+    
+    public ResponseEntity<List<ProductModel>> serviceGetProductsBySupplier(String supplier){
+    	List<ProductModel> products = productRepository.findBySupplier(supplier);
+    	
+    	if (products.isEmpty()) {
+            throw new ResourceNotFoundException("Nenhum produto encontrado com base no fornecedor sugerido.");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .header("X-Custom-Header", "Produtos encontrados com base no fornecedor sugerido!")
+                .body(products);
+    	
+    }
+    
+    
+    public ResponseEntity<List<ProductModel>> serviceGetProductsByCategory(String category){
+    	List<ProductModel> products = productRepository.findByCategory(category);
+    	
+    	if (products.isEmpty()) {
+            throw new ResourceNotFoundException("Nenhum produto encontrado com base na categoria sugerida.");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .header("X-Custom-Header", "Produtos encontrados com base na categoria sugerida!")
+                .body(products);
+    	
     }
 
 

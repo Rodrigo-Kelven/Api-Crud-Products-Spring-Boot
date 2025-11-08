@@ -28,6 +28,9 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
+		<sonar.host.url>http://localhost:9000</sonar.host.url>  <!-- URL do seu servidor SonarQube -->
+    	<!-- Define o token como uma variável de ambiente -->
+    	<sonar.login>${env.SONAR_TOKEN}</sonar.login>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -54,6 +57,30 @@
 		    <artifactId>springfox-boot-starter</artifactId>
 		    <version>3.0.0</version> <!-- Versão mais recente do Springfox para OpenAPI 3 -->
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+		
+		<!-- Dependência do RabbitMQ -->
+	    <dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter-amqp</artifactId>
+	    </dependency>
+	    
+	    <!-- Jackson para serialização e desserialização JSON -->
+	    <dependency>
+	        <groupId>com.fasterxml.jackson.core</groupId>
+	        <artifactId>jackson-databind</artifactId>
+	    </dependency>
+	
+	    <!-- Jackson para integração com Spring -->
+	    <dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter-json</artifactId>
+	    </dependency>
 		
 		<dependency>
 		    <groupId>org.mockito</groupId>
@@ -87,15 +114,24 @@
 	</dependencies>
 
 	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-	                <skipTests>true</skipTests>  <!-- Ignora a execução dos testes -->
+	    <plugins>
+	        <!-- Plugin do Spring Boot -->
+	        <plugin>
+	            <groupId>org.springframework.boot</groupId>
+	            <artifactId>spring-boot-maven-plugin</artifactId>
+	            <configuration>
+	                <skipTests>true</skipTests> <!-- Ignora a execução dos testes -->
 	            </configuration>
-			</plugin>
-		</plugins>
+	        </plugin>
+	
+	        <!-- Plugin do SonarQube -->
+	        <plugin>
+	            <groupId>org.sonarsource.scanner.maven</groupId>
+	            <artifactId>sonar-maven-plugin</artifactId>
+	            <version>3.9.1.2184</version>
+	        </plugin>
+	    </plugins>
 	</build>
+
 
 </project>

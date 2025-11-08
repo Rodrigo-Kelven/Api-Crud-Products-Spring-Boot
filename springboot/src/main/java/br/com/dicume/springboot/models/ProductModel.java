@@ -31,16 +31,22 @@ public class ProductModel implements Serializable{
 	private UUID id;
 	private String name;
 	private BigDecimal price;
+	private String category;
+	private String description;
+	private String supplier;
 	
 	// Construtor que recebe o DTO
-    public ProductModel(String name, BigDecimal price) {
+    public ProductModel(String name, BigDecimal price, String descripton, String supplier, String category) {
         this.name = name;
         this.price = price;
+        this.description = descripton;
+        this.supplier = supplier;
+        this.category = category;
     }
 
     // Método para converter DTO para modelo
     public static ProductModel fromDto(ProductRecordDto dto) {
-        return new ProductModel(dto.name(), dto.price());
+        return new ProductModel(dto.name(), dto.price(), dto.description(), dto.supplier(), dto.category());
     }
     
  // Construtor vazio para JPA
@@ -62,6 +68,24 @@ public class ProductModel implements Serializable{
 	}
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescripton(String description) {
+		this.description = description;
+	}
+	public String getSupplier() {
+		return supplier;
+	}
+	public void setSupplier(String supplier) {
+		this.supplier = supplier;
+	}
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
 	}
 	
 }
