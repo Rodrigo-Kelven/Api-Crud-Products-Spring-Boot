@@ -68,9 +68,14 @@
 ### Para acessar o swagger da API
         http://127.0.0.1:8080/api/v1/swagger-ui/index.html
 
-
 ### Para acessar o PgAdmin (Interface do Banco de Dados) PostGreSQL
         http://127.0.0.1:8081/login?next=/
+
+### Para acessar a interface do SonarQube
+        http://127.0.0.1:9000/
+
+### Para acessar a interface do RabbitMQ
+        http://127.0.0.1:15672/
 
 
 ### Contribuições
