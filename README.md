@@ -64,6 +64,8 @@
         docker compose up
 - #### Rodar API (caso não use IDE)
         mvn spring-boot:run
+- #### Para rodar os tests de qualidade de código e ser visualizado no SonarQube:
+       ./script_qualitity_code.sh
 
 
 ### Para acessar o swagger da API
