@@ -78,7 +78,7 @@
         http://127.0.0.1:8080/api/v1/swagger-ui/index.html
 
 ### Para acessar o PgAdmin (Interface do Banco de Dados) PostGreSQL
-        http://127.0.0.1:8081/login?next=/
+        http://127.0.0.1:8082/login?next=/
     
     Dados: {
         email: admin@admin.com
