@@ -15,7 +15,7 @@ public class OpenApiConfig {
         return new OpenAPI()
             .info(new Info()
                 .title("API Dicume")
-                .version("0.1.6")
+                .version("0.1.7")
                 .description("Esta é a documentação da API Dicume.")
                 .termsOfService("https://github.com/Rodrigo-Kelven/Api-Spring-Boot")
                 .contact(new io.swagger.v3.oas.models.info.Contact()
