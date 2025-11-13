@@ -1,9 +1,11 @@
 package br.com.dicume.springboot.config;
 
+import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.OpenAPI;
+
 
 @Configuration
 public class OpenApiConfig {
@@ -21,5 +23,15 @@ public class OpenApiConfig {
                     .url("https://github.com/Rodrigo-Kelven/Api-Spring-Boot")
                     .email("https://github.com/Rodrigo-Kelven/Api-Spring-Boot"))
             );
+    }
+
+    // Bean para impedir que os endpoints de actuador sejam exibidos no swagger!
+    @Bean
+    public GroupedOpenApi actuatorApi() {
+        // Configura para não exibir os endpoints do actuator na documentação
+        return GroupedOpenApi.builder()
+                .group("default")
+                .pathsToExclude("/actuator/**") // Exclui os endpoints do actuator
+                .build();
     }
 }

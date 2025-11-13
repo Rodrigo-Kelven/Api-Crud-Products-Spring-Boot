@@ -58,10 +58,17 @@
 		    <version>3.0.0</version> <!-- Versão mais recente do Springfox para OpenAPI 3 -->
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
+		<!-- Dependência para Prometheus -->
+	    <dependency>
+	        <groupId>io.micrometer</groupId>
+	        <artifactId>micrometer-registry-prometheus</artifactId>
+	    </dependency>
+	
+	    <!-- Dependência do Actuator para expor as métricas do Spring Boot -->
+	    <dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter-actuator</artifactId>
+	    </dependency>
 
 		
 		<!-- Dependência do RabbitMQ -->

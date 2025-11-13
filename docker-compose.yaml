@@ -13,6 +13,9 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - monitoring
+
 
   pgadmin:
     image: dpage/pgadmin4
@@ -22,9 +25,12 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
-      - "8081:80"
+      - "8082:80"
     depends_on:
       - postgres
+    networks:
+      - monitoring
+
 
   rabbitmq:
     image: rabbitmq:management
@@ -36,6 +42,9 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - monitoring
+
 
   sonarqube:
     image: sonarqube:latest
@@ -53,9 +62,52 @@ services:
       - sonarqube_data:/opt/sonarqube/data
       - sonarqube_extensions:/opt/sonarqube/extensions
       - sonarqube_logs:/opt/sonarqube/logs
+    networks:
+      - monitoring
+
+
+  # Serviço do Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"  # Porta exposta do Prometheus
+    volumes:
+      - ./infra/observability/provisioning/datasources/prometheus.yml:/etc/prometheus/prometheus.yml  # Arquivo de configuração do Prometheus
+      - prometheus_data:/prometheus
+    restart: always
+    networks:
+      - monitoring
+
+
+
+  # Serviço do Grafana
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"  # Porta exposta do Grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin  # Senha padrão do Grafana
+    volumes:
+      - ./infra/observability/provisioning/dashboards:/etc/grafana/provisioning/dashboards  # Para templates de dashboards
+      - ./infra/observability/provisioning/datasources:/etc/grafana/provisioning/datasources  # Para datasources
+    restart: always
+    depends_on:
+      - prometheus  # Grafana só vai iniciar após o Prometheus
+    networks:
+      - monitoring
+
+
+
+  
+networks:
+  monitoring:
+    driver: bridge
 
 volumes:
   postgres_data:
   sonarqube_data:
   sonarqube_extensions:
   sonarqube_logs:
+  prometheus_data:
