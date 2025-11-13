@@ -8,9 +8,12 @@
 ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 ![RabbitMQ](https://img.shields.io/badge/Rabbitmq-FF6600?style=for-the-badge&logo=rabbitmq&logoColor=white)
+![Grafana](https://img.shields.io/badge/grafana-%23F46800.svg?style=for-the-badge&logo=grafana&logoColor=white)
+![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=Prometheus&logoColor=white)
 
 
-### Versão 0.1.6
+
+### Versão 0.1.7
 #### Esta api receberá atualizações e será mais documentada e em breve, ela fará parte de um conjunto de micro serviços.
 
 
@@ -31,6 +34,9 @@
 - Docker: Conteirização do banco de dados e de seua interface
 - SonarQube: Para verificação e qualidade de código.
 - RabbitMQ: Será implementado para melhor performance em partes do sistema.
+- Spring Actuador: Monitoramento de métricas da aplicação ou tráfego/estado de banco de dados.
+- Prometheus: Para captura de logs
+- Grafana: Para geração e visualização de dashboard de dados da aplicação.
 
 ### Estrutura do Projeto.
             ├── src
@@ -104,6 +110,40 @@
         Login: guest
         Senha: guest
     }
+
+### Para acessar a interface do Prometheus
+        http://127.0.0.1:9090/
+
+
+
+### Para acessar a interface do Grafana
+        http://127.0.0.1:3000/
+
+    Dados: {
+        Login: admin
+        Senha: admin
+    }
+
+# Como obter os dashboards no Grafana?
+## Segue o passo a passo:
+#### Clique no botão (New) direito superior e clique em (Import) como exibido na imagem abaixo.
+![Imagem 01](imgs/01.png)
+
+#### Insira o ID do template para realizar o import do mesmo.
+![Imagem 02](imgs/02.png)
+
+#### Selecione o Prometheus para a configuração de captura de dados do dashboard.
+![Imagem 03](imgs/03.png)
+
+#### Veja, seu dashboard ja está pronto.
+![Imagem 04](imgs/04.png)
+
+### Estes são os dashboards que utilizei para monitoramenot de Processamento, JVM, Requests da aplicação e de endpoints.
+- #### JVM Micrometer: 12271
+- #### Spring Boot Statistics & Endpoint Metrics: 14430
+- #### SpringBoot APM Dashboard: 12900
+
+### Para inserir novos dashboards, segue o mesmo processo!
 
 ### Contribuições
 
